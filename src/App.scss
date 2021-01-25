@@ -1,38 +1,68 @@
-.App {
+.main-container {
+  height: 100%;
+  padding: 5px 15px;
+  h2 {
+    margin: 0;
+  }
+  .main-wrapper {
+    @media screen and (min-width: 768px) {
+      display: flex;
+      align-items: flex-start;
+    }
+    padding-top: 10px;
+    .filter-wrapper {
+      @media screen and (min-width: 768px) {
+        flex-basis: 15%;
+      }
+      background-color: white;
+      border-radius: 10px;
+      margin-bottom: 10px;
+      @media screen and (min-width: 768px) {
+        margin-right: 10px;
+      }
+      padding: 5px;
+    }
+    .filter-content__wrapper {
+      @media screen and (min-width: 768px) {
+        flex-basis: 85%;
+        display: flex;
+        flex-wrap: wrap;
+      }
+      &--card {
+        @media screen and (min-width: 768px) {
+          width: 24%;
+        }
+        width: 100%;
+        box-sizing: border-box;
+        margin-right: 10px;
+        padding: 10px;
+        background: white;
+        margin-bottom: 10px;
+        border-radius: 10px;
+        .img-wrapper {
+          background-color: #cccccc;
+          margin: 0 auto;
+          img {
+            width: 100%;
+          }
+        }
+        .cards-content__wrapper {
+          padding-top: 10px;
+          & > strong {
+            color: mediumpurple;
+          }
+          .mission-details {
+            span {
+              padding-left: 5px;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+.footer {
   text-align: center;
-}
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-}
-
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+  padding: 30px 0;
 }
