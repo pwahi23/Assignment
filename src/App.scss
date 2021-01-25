@@ -1,43 +1,31 @@
-.main-container {
-  height: 100%;
-  padding: 5px 15px;
-  h2 {
-    margin: 0;
-  }
-  .main-wrapper {
-    @media screen and (min-width: 768px) {
-      display: flex;
-      align-items: flex-start;
+  .main-container {
+    flex: 1 0 auto;
+    h2 {
+      margin: 0;
     }
-    padding-top: 10px;
-    .filter-wrapper {
-      @media screen and (min-width: 768px) {
-        flex-basis: 15%;
+    .main-wrapper {
+      padding-top: 10px;
+      .filter-wrapper {
+        background-color: white;
+        border-radius: 10px;
+        margin-bottom: 10px;
+        padding: 5px;
       }
-      background-color: white;
-      border-radius: 10px;
-      margin-bottom: 10px;
-      @media screen and (min-width: 768px) {
-        margin-right: 10px;
-      }
-      padding: 5px;
-    }
-    .filter-content__wrapper {
-      @media screen and (min-width: 768px) {
-        flex-basis: 85%;
+      .launch-btn__wrapper {
         display: flex;
         flex-wrap: wrap;
-      }
-      &--card {
-        @media screen and (min-width: 768px) {
-          width: 24%;
+        button {
+          flex: 0 40%;
+          margin: 10px;
         }
+      }
+    }
+    .filter-content__wrapper {
+      &--card {
         width: 100%;
         box-sizing: border-box;
-        margin-right: 10px;
         padding: 10px;
         background: white;
-        margin-bottom: 10px;
         border-radius: 10px;
         .img-wrapper {
           background-color: #cccccc;
@@ -60,9 +48,16 @@
       }
     }
   }
-}
-
 .footer {
   text-align: center;
   padding: 30px 0;
+}
+
+
+.App {
+  height: 100%;
+  background-color: #cccccc;
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
 }

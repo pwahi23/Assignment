@@ -1,104 +1,179 @@
-import logo from './logo.svg';
 import './App.scss';
-
+import { Container, Card, Button, Row, Col } from 'react-bootstrap';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import { useEffect, useState } from "react";
+import axios from 'axios';
+import querystring from 'querystring';
+import loader from './rocket.gif';
 function App() {
-  return (
-    <>
-      <section className="main-container">
-        <h2>SpaceX Launch Programs</h2>
-        <div className="main-wrapper">
-          <div className="filter-wrapper">
-              <strong>Filters</strong>
-          </div>
-          <div className="filter-content__wrapper">
-            <div className="filter-content__wrapper--card">
-              <div className="img-wrapper">
-              </div>
-              <div className="cards-content__wrapper">
-                <strong>FalconSat #1</strong>
-                <div className="mission-details">
-                  <p>
-                    <strong>Mission Id's</strong>
-                    <span>Telsa1, Tesla2</span>
-                  </p>
-                  <p></p>
-                  <p></p>
-                  <p></p>
-                </div>
-              </div>
-            </div>
+  const API_BASE_URL = "https://api.spacexdata.com/v3/launches?limit=100";
+  const [uniqueLaunchYears, setUniqueLaunchYears] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [cardsData, setCardsData] = useState([]);
+  const [filters, setFilters] = useState({
+    launch_year: undefined,
+    launch_success: undefined,
+    land_success: undefined
+  })
+  const getData = async (url) => {
+      const URL = getUpdatedURL(filters);
+      let apiData = await axios.get(URL).then(response => response.data);
+      setCardsData(apiData);
+      setIsLoading(true);
+  }
 
-            <div className="filter-content__wrapper--card">
-              <div className="img-wrapper">
-              </div>
-              <div className="cards-content__wrapper">
-                <strong>FalconSat #1</strong>
-                <div className="mission-details">
-                  <p>
-                    <strong>Mission Id's</strong>
-                    <span>Telsa1, Tesla2</span>
-                  </p>
-                  <p></p>
-                  <p></p>
-                  <p></p>
-                </div>
-              </div>
-            </div>
+  const getUpdatedURL = (filters = {}) => {
+    return API_BASE_URL + "&" + querystring.stringify({ ...filters });
+  }
+  const handleClick = (value, type) => { 
+    if (filters[type] === value) {
+      value = undefined;
+    }   
+    setFilters(prevState => ({
+      ...prevState,
+      [type]: value
+    }))
+  }
 
-            <div className="filter-content__wrapper--card">
-              <div className="img-wrapper">
-                <img src="https://images2.imgbox.com/52/09/eNvilptL_o.png" alt="SpaceX" />
-              </div>
-              <div className="cards-content__wrapper">
-                <strong>FalconSat #1</strong>
-                <div className="mission-details">
-                  <p>
-                    <strong>Mission Id's:</strong>
-                    <span>Telsa1, Tesla2</span>
-                  </p>
-                  <p>
-                    <strong>Launch Year:</strong>
-                    <span>2020</span>
-                  </p>
-                  <p>
-                    <strong>SuccessFul Launch:</strong>
-                    <span>Success</span>
-                  </p>
-                  <p>
-                    <strong>SuccessFul Landing:</strong>
-                    <span>Success</span>
-                  </p>
-                </div>
-              </div>
-            </div>
+  useEffect(() => {
+    getData(filters);
+  }, [filters])
 
-            <div className="filter-content__wrapper--card">
-              <div className="img-wrapper">
-              </div>
-              <div className="cards-content__wrapper">
-                <strong>FalconSat #1</strong>
-                <div className="mission-details">
-                  <p>
-                    <strong>Mission Id's</strong>
-                    <span>Telsa1, Tesla2</span>
-                  </p>
-                  <p></p>
-                  <p></p>
-                  <p></p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-    </section>  
-    <footer>
-    <div className="footer">
-      <strong>Developed By: </strong>
-      <span>Prateek Wahi</span>
+  useEffect(() => {
+    if (!cardsData) return;
+    let tempArr = [];
+    cardsData.map(date => {
+      if(!tempArr.includes(date.launch_year)) {
+          tempArr.push(date.launch_year);
+      }
+    })
+    setUniqueLaunchYears(tempArr)
+  },[])
+
+  if (!isLoading) {
+    return (
+      <div className="loader-container">
+        <img src={loader} className="w-100" alt="loading..." />
+    </div>)
+  }
+  else {
+    return (
+      <div className="App">
+        <Container fluid className="main-container">
+          <h2>SpaceX Launch Programs</h2>
+          <Row className="pt-3">
+            <Col xs={12} sm={12} md={6} lg={3}>
+              <Card className="main-wrapper">
+                <Card.Body>
+                    <Card.Title>
+                        Filters
+                    </Card.Title>
+                    <Card.Text className="text-center pt-2">
+                        Launch Year
+                    </Card.Text>
+                    <hr className="m-0"/>
+                  <div className="launch-btn__wrapper">
+                    {uniqueLaunchYears.length > 0 && uniqueLaunchYears.map((year, index) => {
+                      return (<Button variant="success" key={index} className={
+                        filters.launch_year ===
+                        year.toString()
+                          ? "active"
+                          : ""
+                      } onClick={(event) => handleClick(event.target.value, 'launch_year')} className="launch-btn" value={year}>{year}</Button>)
+                    })}
+                  </div>
+                  <Card.Text className="text-center pt-2">
+                    Successful Launch
+                  </Card.Text>
+                  <hr className="m-0"/>
+                  <div className="launch-btn__wrapper">
+                    <Button value="true" variant="success" className={filters.launch_success === "true"
+                              ? "active"
+                              : ""
+                          } onClick={(event) => handleClick(event.target.value, 'launch_success')}>
+                        True
+                    </Button>
+
+                    <Button value="false" variant="success" className={filters.launch_success === "false"
+                              ? "active"
+                              : ""
+                          } onClick={(event) => handleClick(event.target.value, 'launch_success')}>
+                        False
+                    </Button>
+                  </div>
+                  <Card.Text className="text-center pt-2">
+                    Successful Landing
+                  </Card.Text>
+                  <hr className="m-0"/>
+                  <div className="launch-btn__wrapper">
+                    <Button value="true" variant="success" className={filters.land_success === "true"
+                              ? "active"
+                              : ""
+                          } onClick={(event) => handleClick(event.target.value, 'land_success')}>
+                        True
+                    </Button>
+
+                    <Button value="false" variant="success" className={filters.land_success === "false"
+                              ? "active"
+                              : ""
+                          } onClick={(event) => handleClick(event.target.value, event.target.value)}>
+                        False
+                    </Button>
+                  </div>
+                </Card.Body>
+              </Card>
+            </Col>
+            <Col xs={12} sm={12} md={6} lg={9}>
+              <Row className="filter-content__wrapper m-0">
+              {cardsData.length > 0 && cardsData.map(cardData => {
+                return(
+                  <Col md={12} lg={3} className="mb-3">
+                    <div className="filter-content__wrapper--card h-100">
+                      <div className="img-wrapper" key={cardData.flight_number}>
+                        <img src={cardData.links.mission_patch_small} alt="SpaceX" />
+                      </div>
+                      <div className="cards-content__wrapper">
+                        <strong>{cardData.mission_name} #{cardData.flight_number}</strong>
+                        <div className="mission-details pt-2">
+                        {cardData.mission_id.length > 0 &&
+                          <div>
+                            <strong>Mission Id's:</strong>
+                            <ul>
+                              <li>{cardData.mission_id}</li>
+                            </ul>
+                          </div>
+                        }
+                          <p>
+                            <strong>Launch Year:</strong>
+                            <span>{cardData.launch_year}</span>
+                          </p>
+                          <p>
+                            <strong>SuccessFul Launch:</strong>
+                            <span>{cardData.launch_success ? "True" : "False"}</span>
+                          </p>
+                          <p>
+                            <strong>SuccessFul Landing:</strong>
+                            <span> {cardData.land_success ? "True" : "False"}</span>
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </Col>
+                )
+              })}
+              </Row>
+            </Col>
+          </Row>
+      </Container>  
+      <footer>
+      <div className="footer">
+        <strong>Developed By: </strong>
+        <span>Prateek Wahi</span>
+      </div>
+    </footer>
     </div>
-  </footer>
-  </>
-  );
+    );
+  }
 }
 
 export default App;
