@@ -18,6 +18,14 @@
           flex: 0 40%;
           margin: 10px;
         }
+        .btn-success {
+          background-color: #17ea46;
+          border-color: #17ea46;
+          &.active {
+            background-color: #28a745;
+            border-color: #28a745;
+          }
+        }
       }
     }
     .filter-content__wrapper {

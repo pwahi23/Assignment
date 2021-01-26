@@ -15,12 +15,23 @@ function App() {
     launch_success: undefined,
     land_success: undefined
   })
-  const getData = async (url) => {
+  const updateDateFilters = async (url) => {
       const URL = getUpdatedURL(filters);
       let apiData = await axios.get(URL).then(response => response.data);
       setCardsData(apiData);
       setIsLoading(true);
   }
+
+  const getYears = async () => {
+    let apiData = await axios.get(API_BASE_URL).then(response => response.data);
+    let tempArr = [];
+    apiData.map(date => {
+      if(!tempArr.includes(date.launch_year)) {
+          tempArr.push(date.launch_year);
+      }
+    })
+    setUniqueLaunchYears(tempArr);
+}
 
   const getUpdatedURL = (filters = {}) => {
     return API_BASE_URL + "&" + querystring.stringify({ ...filters });
@@ -36,18 +47,11 @@ function App() {
   }
 
   useEffect(() => {
-    getData(filters);
+    updateDateFilters(filters);
   }, [filters])
 
   useEffect(() => {
-    if (!cardsData) return;
-    let tempArr = [];
-    cardsData.map(date => {
-      if(!tempArr.includes(date.launch_year)) {
-          tempArr.push(date.launch_year);
-      }
-    })
-    setUniqueLaunchYears(tempArr)
+    getYears();
   },[])
 
   if (!isLoading) {
@@ -75,11 +79,8 @@ function App() {
                   <div className="launch-btn__wrapper">
                     {uniqueLaunchYears.length > 0 && uniqueLaunchYears.map((year, index) => {
                       return (<Button variant="success" key={index} className={
-                        filters.launch_year ===
-                        year.toString()
-                          ? "active"
-                          : ""
-                      } onClick={(event) => handleClick(event.target.value, 'launch_year')} className="launch-btn" value={year}>{year}</Button>)
+                        filters.launch_year === year ? "active" : ""} 
+                        onClick={(event) => handleClick(event.target.value, 'launch_year')} value={year}>{year}</Button>)
                     })}
                   </div>
                   <Card.Text className="text-center pt-2">
