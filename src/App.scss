@@ -79,9 +79,28 @@
 }
 
 @media screen and (max-width: 1024px) and (min-width: 700px){
-  .main-container .main-wrapper .launch-btn__wrapper {
+ .main-container .main-wrapper .launch-btn__wrapper {
       & > button {
         margin: 10px 8px;
       }
-  }
+    }
+    .main-container .filter-content__wrapper {
+      margin-top: 0 !important;
+    }
+    .main-container .filter-content__wrapper > div {
+      padding-right: 15px;
+    }
+    .main-container.container-fluid {
+      .row {
+        .col-sm-12 {
+          flex: 0 0 66.66% !important; 
+          &:first-child {
+            flex: 0 0 33.333333% !important; 
+          }
+          .col-lg-3 {
+            flex: 0 0 50% !important;
+          }
+        }
+      }
+    }
 }
