@@ -77,3 +77,11 @@
   flex-direction: column;
   min-height: 100%;
 }
+
+@media screen and (max-width: 1024px) and (min-width: 700px){
+  .main-container .main-wrapper .launch-btn__wrapper {
+      & > button {
+        margin: 10px 8px;
+      }
+  }
+}
