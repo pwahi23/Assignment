@@ -66,7 +66,7 @@ function App() {
         <Container fluid className="main-container">
           <h2>SpaceX Launch Programs</h2>
           <Row className="pt-3">
-            <Col xs={12} sm={12} md={6} lg={3}>
+            <Col xs={12} sm={12} md={4} lg={3}>
               <Card className="main-wrapper">
                 <Card.Body>
                     <Card.Title>
@@ -124,11 +124,11 @@ function App() {
                 </Card.Body>
               </Card>
             </Col>
-            <Col xs={12} sm={12} md={6} lg={9}>
+            <Col xs={12} sm={12} md={8} lg={9}>
               <Row className="filter-content__wrapper m-0">
               {cardsData.length > 0 && cardsData.map(cardData => {
                 return(
-                  <Col md={12} lg={3} className="mb-3">
+                  <Col md={6} sm={12} xs={12} lg={3} className="mb-3">
                     <div className="filter-content__wrapper--card h-100">
                       <div className="img-wrapper" key={cardData.flight_number}>
                         <img src={cardData.links.mission_patch_small} alt="SpaceX" />
